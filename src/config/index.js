@@ -5,6 +5,7 @@ const _7DAYS = 1000 * 60 * 60 * 24 * 7;
 export const config = {
   PORT: process.env.PORT,
   NODE_ENV: process.env.NODE_ENV,
+  LOG_LEVEL: process.env.LOG_LEVEL,
   CORS_WHITELIST,
   WINDOW_MS: _1H,
   MONGO_URI: process.env.MONGO_URI,
