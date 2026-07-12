@@ -2,7 +2,7 @@ import { logger } from '../utils/logger.js';
 import { CustomError } from '../errors/customError.js';
 import { BadRequestError } from '../errors/badRequest.js';
 import { NotFoundError } from '../errors/notFound.js';
-import { UnauthenticatedError } from '../errors/unAuthenticated.js';
+import { UnAuthenticatedError } from '../errors/unAuthenticated.js';
 
 const errorHandler = (err, req, res, next) => {
   logger.error({
@@ -33,11 +33,11 @@ const errorHandler = (err, req, res, next) => {
 
   // JWT Error
   if (err.name === 'JsonWebTokenError') {
-    err = new UnauthenticatedError('invalid token, please login again');
+    err = new UnAuthenticatedError('invalid token, please login again');
   }
 
   if (err.name === 'TokenExpiredError') {
-    err = new UnauthenticatedError('token expired, please login again');
+    err = new UnAuthenticatedError('token expired, please login again');
   }
 
   // Invalid JSON

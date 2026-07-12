@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser';
 import compression from 'compression';
 import morgan from 'morgan';
 
-import { errorHandler } from './middlewares/errorHandler.js';
+import errorHandler from './middlewares/errorHandler.js';
 
 import router from './routes/index.js';
 
@@ -22,10 +22,10 @@ app.use(
   }),
 );
 
-app.use(morgan('common'));
-
-app.use(errorHandler);
+app.use(morgan('dev'));
 
 app.use('/api', router);
+
+app.use(errorHandler);
 
 export default app;

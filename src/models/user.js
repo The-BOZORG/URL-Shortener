@@ -29,7 +29,7 @@ const userSchema = new Schema(
       type: Number,
       default: 0,
     },
-    passwordResetToken: {
+    verificationToken: {
       type: String,
       default: null,
       select: false,

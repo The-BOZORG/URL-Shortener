@@ -1,7 +1,7 @@
 import { TokenExpiredError, JsonWebTokenError } from 'jsonwebtoken';
 import { logger } from '../utils/logger.js';
 import { verifyAccessToken } from '../utils/jwt.js';
-import User from '../models/user.js';
+import { User } from '../models/user.js';
 
 import { UnAuthenticatedError } from '../errors/unAuthenticated.js';
 import { ForbiddenError } from '../errors/forbidden.js';
