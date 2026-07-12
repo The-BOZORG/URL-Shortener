@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { config } from '../config/index.js';
 
 export const createPayload = (user) => {
-  return { userId: user._id, role: user.role };
+  return { userId: user._id };
 };
 
 export const generateAccessToken = ({ payload }) => {

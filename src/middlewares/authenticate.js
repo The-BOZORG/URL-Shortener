@@ -1,2 +1,72 @@
 import { TokenExpiredError, JsonWebTokenError } from 'jsonwebtoken';
-import { Logger } from '../utils/logger.js';
+import { logger } from '../utils/logger.js';
+import { verifyAccessToken } from '../utils/jwt.js';
+import User from '../models/user.js';
+
+import { UnAuthenticatedError } from '../errors/unAuthenticated.js';
+import { ConflictError } from '../errors/conflict.js';
+import { ForbiddenError } from '../errors/forbidden.js';
+
+export const authenticate = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader || !authHeader.startsWith('Bearer '))
+    throw new UnAuthenticatedError('access denied,no token provided');
+
+  const token = authHeader.split(' ')[1];
+
+  try {
+    const jwtPayload = verifyAccessToken(token);
+
+    req.userId = jwtPayload.userId;
+
+    return next();
+  } catch (error) {
+    if (error instanceof TokenExpiredError) {
+      res.status(401).json({
+        code: 'AuthenticationError',
+        message: 'access token expiry, request new one',
+      });
+      return;
+    }
+
+    if (error instanceof JsonWebTokenError) {
+      res.status(401).json({
+        code: 'AuthenticationError',
+        message: 'invalid access token',
+      });
+      return;
+    }
+    res.status(500).json({
+      code: 'ServerError',
+      message: 'internal server error',
+      error: error,
+    });
+    logger.error({
+      message: 'Error during authentication',
+      error,
+    });
+  }
+};
+
+export const authorizePermissions = (...roles) => {
+  return async (req, res, next) => {
+    const user = await User.findById(req.userId);
+
+    if (!user) {
+      throw new ConflictError('user not found');
+    }
+
+    if (!roles.includes(user.role)) {
+      throw new ForbiddenError('unauthorized to access this route');
+    }
+
+    next();
+  };
+};
+
+export const checkPermissions = (requestUser, resourceUserId) => {
+  if (requestUser.role === 'admin') return;
+  if (requestUser.userId === resourceUserId.toString()) return;
+  throw new ForbiddenError('not authorized to access this route');
+};
