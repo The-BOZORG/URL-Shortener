@@ -7,6 +7,8 @@ import morgan from 'morgan';
 
 import { errorHandler } from './middlewares/errorHandler.js';
 
+import router from './routes/index.js';
+
 const app = express();
 
 app.use(express.json({ limit: '10kb' }));
@@ -23,5 +25,7 @@ app.use(
 app.use(morgan('common'));
 
 app.use(errorHandler);
+
+app.use('/api', router);
 
 export default app;
