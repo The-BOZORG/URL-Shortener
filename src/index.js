@@ -3,6 +3,9 @@ import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
+import morgan from 'morgan';
+
+import { errorHandler } from './middlewares/errorHandler.js';
 
 const app = express();
 
@@ -16,5 +19,9 @@ app.use(
     threshold: 1024,
   }),
 );
+
+app.use(morgan('common'));
+
+app.use(errorHandler);
 
 export default app;

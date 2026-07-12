@@ -4,7 +4,6 @@ import { verifyAccessToken } from '../utils/jwt.js';
 import User from '../models/user.js';
 
 import { UnAuthenticatedError } from '../errors/unAuthenticated.js';
-import { ConflictError } from '../errors/conflict.js';
 import { ForbiddenError } from '../errors/forbidden.js';
 
 export const authenticate = (req, res, next) => {
@@ -51,10 +50,10 @@ export const authenticate = (req, res, next) => {
 
 export const authorizePermissions = (...roles) => {
   return async (req, res, next) => {
-    const user = await User.findById(req.userId);
+    const user = await User.findById(req.userId).select('role').exec();
 
     if (!user) {
-      throw new ConflictError('user not found');
+      throw new UnAuthenticatedError('user not found');
     }
 
     if (!roles.includes(user.role)) {
@@ -65,8 +64,20 @@ export const authorizePermissions = (...roles) => {
   };
 };
 
-export const checkPermissions = (requestUser, resourceUserId) => {
-  if (requestUser.role === 'admin') return;
-  if (requestUser.userId === resourceUserId.toString()) return;
-  throw new ForbiddenError('not authorized to access this route');
+export const checkPermissions = async (userId, resourceUserId) => {
+  const user = await User.findById(userId).select('role').exec();
+
+  if (!user) {
+    throw new UnAuthenticatedError('user not found');
+  }
+
+  if (user.role === 'admin') {
+    return;
+  }
+
+  if (user._id.toString() === resourceUserId.toString()) {
+    return;
+  }
+
+  throw new ForbiddenError('Not authorized to access this route');
 };

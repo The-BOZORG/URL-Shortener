@@ -27,9 +27,7 @@ export const verifyRefreshToken = (token) => {
   return jwt.verify(token, config.JWT_REFRESH_TOKEN);
 };
 
-export const createTokenCookie = ({ res, user }) => {
-  const payload = createPayload(user);
-
+export const createTokenCookie = ({ res, payload }) => {
   const refreshToken = generateRefreshToken({ payload });
 
   res.cookie('refreshToken', refreshToken, {
