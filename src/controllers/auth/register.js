@@ -39,7 +39,7 @@ export const register = asyncHandler(async (req, res) => {
   const origin = config.CLIENT_ORIGIN;
 
   await sendVerificationEmail({
-    name: newUser.name,
+    name: newUser.username,
     email: newUser.email,
     verificationToken: newUser.verificationToken,
     origin,

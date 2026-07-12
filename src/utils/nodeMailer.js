@@ -1,4 +1,4 @@
-import { config } from '../config';
+import { config } from '../config/index.js';
 import nodemailer from 'nodemailer';
 
 export const nodemailerConfig = nodemailer.createTransport({

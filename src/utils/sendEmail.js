@@ -2,12 +2,10 @@ import nodemailer from 'nodemailer';
 import { nodemailerConfig } from './nodeMailer.js';
 
 export const sendEmail = async ({ to, subject, html }) => {
-  let account = await nodemailer.createTestAccount();
+  const account = await nodemailer.createTestAccount();
 
-  const transporter = nodemailer.createTransport(nodemailerConfig);
-
-  return transporter.sendMail({
-    from: '"URL Shorter <shorter@service.com>',
+  return nodemailerConfig.sendMail({
+    from: '"URL Shortener" <shorter@service.com>',
     to,
     subject,
     html,

@@ -39,7 +39,7 @@ const userSchema = new Schema(
       default: false,
     },
     verified: Date,
-    refreshToken: {
+    hashedRefreshToken: {
       type: String,
       default: null,
       select: false,
