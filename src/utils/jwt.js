@@ -7,7 +7,7 @@ export const createPayload = (user) => {
 };
 
 export const hashString = (string) =>
-  crypto.createHash('md5').update(string).digest('hex');
+  crypto.createHash('sha256').update(string).digest('hex');
 
 export const generateAccessToken = ({ payload }) => {
   return jwt.sign(payload, config.JWT_ACCESS_TOKEN, {

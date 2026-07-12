@@ -1,4 +1,4 @@
-import { TokenExpiredError, JsonWebTokenError } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { logger } from '../utils/logger.js';
 import { verifyAccessToken } from '../utils/jwt.js';
 import { User } from '../models/user.js';
@@ -17,11 +17,11 @@ export const authenticate = (req, res, next) => {
   try {
     const jwtPayload = verifyAccessToken(token);
 
-    req.userId = jwtPayload.userId;
+    req.user = jwtPayload;
 
     return next();
   } catch (error) {
-    if (error instanceof TokenExpiredError) {
+    if (error instanceof jwt.TokenExpiredError) {
       res.status(401).json({
         code: 'AuthenticationError',
         message: 'access token expiry, request new one',
@@ -29,7 +29,7 @@ export const authenticate = (req, res, next) => {
       return;
     }
 
-    if (error instanceof JsonWebTokenError) {
+    if (error instanceof jwt.JsonWebTokenError) {
       res.status(401).json({
         code: 'AuthenticationError',
         message: 'invalid access token',
