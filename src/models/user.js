@@ -34,6 +34,11 @@ const userSchema = new Schema(
       default: null,
       select: false,
     },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+    verified: Date,
     refreshToken: {
       type: String,
       default: null,

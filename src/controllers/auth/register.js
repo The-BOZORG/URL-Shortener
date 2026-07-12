@@ -1,25 +1,23 @@
+import crypto from 'crypto';
+
 import { logger } from '../../utils/logger.js';
 import { User } from '../../models/user.js';
 import { config } from '../../config/index.js';
 import { asyncHandler } from '../../middlewares/asyncHandler.js';
 
-import {
-  generateAccessToken,
-  createTokenCookie,
-  createPayload,
-} from '../../utils/jwt.js';
+import { sendVerificationEmail } from '../../utils/sendVerificationEmail.js';
 
 import { ForbiddenError } from '../../errors/forbidden.js';
-import { BadRequestError } from '../../errors/badRequest.js';
+import { ConflictError } from '../../errors/conflict.js';
 
 export const register = asyncHandler(async (req, res) => {
   const { username, email, password, role } = req.body;
 
   const emailAlreadyExist = await User.findOne({ email }).lean().exec();
 
-  if (emailAlreadyExist) {
-    throw new BadRequestError('email already exist');
-  }
+  if (emailAlreadyExist) throw new ConflictError('email already exist');
+
+  logger.warn(`this email:${email} already used`);
 
   if (role === 'admin' && !config.WHITELISTED_EMAIL.includes(email)) {
     logger.warn(
@@ -27,30 +25,29 @@ export const register = asyncHandler(async (req, res) => {
     );
     throw new ForbiddenError('you can not register as admin');
   }
+
+  const verificationToken = crypto.randomBytes(40).toString('hex');
+
   const newUser = await User.create({
     username,
     email,
     password,
     role,
+    verificationToken,
   });
 
-  const payload = createPayload(newUser);
-  const accessToken = generateAccessToken({ payload });
-  const refreshToken = createTokenCookie({
-    res,
-    payload,
+  const origin = config.CLIENT_ORIGIN;
+
+  await sendVerificationEmail({
+    name: newUser.name,
+    email: newUser.email,
+    verificationToken: newUser.verificationToken,
+    origin,
   });
 
-  newUser.refreshToken = refreshToken;
-  await newUser.save();
+  logger.info('verificationToken token sended successfully');
 
   res.status(201).json({
-    user: {
-      username: newUser.username,
-      email: newUser.email,
-      role: newUser.role,
-    },
-    accessToken,
+    msg: 'Registration successful. Please check your email to verify your account.',
   });
-  logger.info('user register success!');
 });

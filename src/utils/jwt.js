@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import crypto from 'crypto';
 import { config } from '../config/index.js';
 
 export const createPayload = (user) => {
