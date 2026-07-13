@@ -50,7 +50,8 @@ export const authenticate = (req, res, next) => {
 
 export const authorizePermissions = (...roles) => {
   return async (req, res, next) => {
-    const user = await User.findById(req.userId).select('role').exec();
+    const { userId } = req.user;
+    const user = await User.findById(userId).select('role').exec();
 
     if (!user) {
       throw new UnAuthenticatedError('user not found');
