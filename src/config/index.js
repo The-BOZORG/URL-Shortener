@@ -1,5 +1,4 @@
 const CORS_WHITELIST = ['https://URL-Shorter.project.com'];
-const _1H = 1000 * 60 * 60;
 const _7DAYS = 1000 * 60 * 60 * 24 * 7;
 
 export const config = {
@@ -7,7 +6,6 @@ export const config = {
   NODE_ENV: process.env.NODE_ENV,
   LOG_LEVEL: process.env.LOG_LEVEL,
   CORS_WHITELIST,
-  WINDOW_MS: _1H,
   MONGO_URI: process.env.MONGO_URI,
   WHITELISTED_EMAIL: process.env.WHITELISTED_EMAIL?.split(','),
   JWT_ACCESS_TOKEN: process.env.JWT_ACCESS_TOKEN,

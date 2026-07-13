@@ -19,16 +19,20 @@ import {
   paramsValidator,
 } from '../validators/user.js';
 
+import { global } from '../utils/rateLimiter.js';
+
 const userRouter = Router();
 
 userRouter.get(
   '/me',
+  global,
   authenticate,
   authorizePermissions('user', 'admin'),
   getUser,
 );
 userRouter.get(
   '/get-all',
+  global,
   authenticate,
   getUserValidator,
   checkValidation,
@@ -38,6 +42,7 @@ userRouter.get(
 
 userRouter.patch(
   '/update',
+  global,
   authenticate,
   updateValidator,
   checkValidation,
@@ -47,6 +52,7 @@ userRouter.patch(
 
 userRouter.delete(
   '/delete/:id',
+  global,
   authenticate,
   paramsValidator,
   checkValidation,
@@ -56,6 +62,7 @@ userRouter.delete(
 
 userRouter.get(
   '/get-user/:id',
+  global,
   authenticate,
   paramsValidator,
   checkValidation,
@@ -65,6 +72,7 @@ userRouter.get(
 
 userRouter.get(
   '/get-email/:email',
+  global,
   authenticate,
   authorizePermissions('admin'),
   getUserByEmail,

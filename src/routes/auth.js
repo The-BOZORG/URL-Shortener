@@ -9,13 +9,20 @@ import { refresh } from '../controllers/auth/refreshToken.js';
 import { checkValidation } from '../middlewares/checkValidation.js';
 import { authenticate } from '../middlewares/authenticate.js';
 import { loginValidator, registerValidator } from '../validators/auth.js';
+import { global, auth } from '../utils/rateLimiter.js';
 
 const authRouter = Router();
 
-authRouter.post('/register', registerValidator, checkValidation, register);
-authRouter.get('/verify-email', verifyEmail);
-authRouter.post('/login', loginValidator, checkValidation, login);
-authRouter.post('/logout', authenticate, logout);
-authRouter.post('/refresh', authenticate, refresh);
+authRouter.post(
+  '/register',
+  auth,
+  registerValidator,
+  checkValidation,
+  register,
+);
+authRouter.get('/verify-email', global, verifyEmail);
+authRouter.post('/login', auth, loginValidator, checkValidation, login);
+authRouter.post('/logout', global, authenticate, logout);
+authRouter.post('/refresh', global, authenticate, refresh);
 
 export default authRouter;

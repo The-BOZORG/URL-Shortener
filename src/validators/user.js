@@ -27,5 +27,5 @@ export const updateValidator = [
 ];
 
 export const paramsValidator = [
-  param('userId').notEmpty().isMongoId().withMessage('invalid user id'),
+  param('id').notEmpty().isMongoId().withMessage('invalid user id'),
 ];
