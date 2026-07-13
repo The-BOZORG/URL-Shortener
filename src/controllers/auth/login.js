@@ -2,8 +2,6 @@ import { logger } from '../../utils/logger.js';
 import { User } from '../../models/user.js';
 import { asyncHandler } from '../../middlewares/asyncHandler.js';
 
-import { ConflictError } from '../../errors/conflict.js';
-import { BadRequestError } from '../../errors/badRequest.js';
 import { UnAuthenticatedError } from '../../errors/unAuthenticated.js';
 
 import {
@@ -16,23 +14,18 @@ import {
 export const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  if (!email || !password) {
-    logger.warn('email or password is not provide');
-    throw new BadRequestError('provide email and password');
-  }
-
   const user = await User.findOne({ email }).select('+password');
 
   if (!user) {
     logger.warn(`User not found: ${email}`);
-    throw new ConflictError('Invalid credentials');
+    throw new UnAuthenticatedError('invalid credentials');
   }
 
   const correctPassword = await user.comparePassword(password);
 
   if (!correctPassword) {
-    logger.warn(`wrong password: ${email}`);
-    throw new UnAuthenticatedError('Invalid credentials');
+    logger.error(`wrong password: ${email}`);
+    throw new UnAuthenticatedError('invalid credentials');
   }
 
   if (!user.isVerified) {

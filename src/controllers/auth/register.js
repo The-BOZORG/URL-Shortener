@@ -8,16 +8,9 @@ import { asyncHandler } from '../../middlewares/asyncHandler.js';
 import { sendVerificationEmail } from '../../utils/sendVerificationEmail.js';
 
 import { ForbiddenError } from '../../errors/forbidden.js';
-import { ConflictError } from '../../errors/conflict.js';
 
 export const register = asyncHandler(async (req, res) => {
   const { username, email, password, role } = req.body;
-
-  const emailAlreadyExist = await User.findOne({ email }).lean().exec();
-
-  if (emailAlreadyExist) throw new ConflictError('email already exist');
-
-  logger.warn(`this email:${email} already used`);
 
   if (role === 'admin' && !config.WHITELISTED_EMAIL.includes(email)) {
     logger.warn(
