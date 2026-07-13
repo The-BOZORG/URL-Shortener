@@ -3,6 +3,7 @@ import { Router } from 'express';
 import { getUser } from '../controllers/user/getUser.js';
 import { getAllUser } from '../controllers/user/getAllUser.js';
 import { getUserById } from '../controllers/user/getUserById.js';
+import { updateUser } from '../controllers/user/updateUser.js';
 
 import {
   authenticate,
@@ -22,6 +23,13 @@ userRouter.get(
   authenticate,
   authorizePermissions('admin'),
   getAllUser,
+);
+
+userRouter.patch(
+  '/update',
+  authenticate,
+  authorizePermissions('user', 'admin'),
+  updateUser,
 );
 
 userRouter.get(
