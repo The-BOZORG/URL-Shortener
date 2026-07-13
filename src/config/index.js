@@ -19,4 +19,6 @@ export const config = {
   CLIENT_ORIGIN: process.env.CLIENT_ORIGIN,
   SMPT_AUTH_USERNAME: process.env.SMPT_AUTH_USERNAME,
   SMPT_AUTH_PASS: process.env.SMPT_AUTH_PASS,
+  defaultResLimit: 10,
+  defaultResOffset: 0,
 };
