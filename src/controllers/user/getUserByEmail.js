@@ -3,7 +3,7 @@ import { asyncHandler } from '../../middlewares/asyncHandler.js';
 import { User } from '../../models/user.js';
 
 export const getUserByEmail = asyncHandler(async (req, res) => {
-  const { email } = req.params;
+  const { email } = req.query;
 
   const user = await User.findOne(email).select('-__v').lean().exec();
 

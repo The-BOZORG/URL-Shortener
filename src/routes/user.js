@@ -11,6 +11,13 @@ import {
   authenticate,
   authorizePermissions,
 } from '../middlewares/authenticate.js';
+import { checkValidation } from '../middlewares/checkValidation.js';
+
+import {
+  getUserValidator,
+  updateValidator,
+  paramsValidator,
+} from '../validators/user.js';
 
 const userRouter = Router();
 
@@ -23,6 +30,8 @@ userRouter.get(
 userRouter.get(
   '/get-all',
   authenticate,
+  getUserValidator,
+  checkValidation,
   authorizePermissions('admin'),
   getAllUser,
 );
@@ -30,6 +39,8 @@ userRouter.get(
 userRouter.patch(
   '/update',
   authenticate,
+  updateValidator,
+  checkValidation,
   authorizePermissions('user', 'admin'),
   updateUser,
 );
@@ -37,6 +48,8 @@ userRouter.patch(
 userRouter.delete(
   '/delete/:id',
   authenticate,
+  paramsValidator,
+  checkValidation,
   authorizePermissions('admin'),
   deleteUser,
 );
@@ -44,12 +57,14 @@ userRouter.delete(
 userRouter.get(
   '/get-user/:id',
   authenticate,
+  paramsValidator,
+  checkValidation,
   authorizePermissions('user', 'admin'),
   getUserById,
 );
 
 userRouter.get(
-  '/get-email/:id',
+  '/get-email/:email',
   authenticate,
   authorizePermissions('admin'),
   getUserByEmail,
