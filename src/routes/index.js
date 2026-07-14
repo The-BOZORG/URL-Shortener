@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import authRouter from './auth.js';
 import userRouter from './user.js';
+import linkRouter from './link.js';
 
 const router = Router();
 
@@ -15,5 +16,6 @@ router.get('/', (req, res) => {
 
 router.use('/auth', authRouter);
 router.use('/user', userRouter);
+router.use('/link', linkRouter);
 
 export default router;
