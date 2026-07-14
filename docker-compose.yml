@@ -1,0 +1,45 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: url-shortener-app
+    restart: unless-stopped
+    ports:
+      - '${PORT:-3000}:3000'
+    env_file:
+      - .env
+    environment:
+      # Override the database host to the mongo service on the docker network
+      MONGO_URI: 'mongodb://mongo:27017/URLshortner'
+      NODE_ENV: 'production'
+      PORT: '3000'
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - url-shortener
+
+  mongo:
+    image: mongo:7
+    container_name: url-shortener-mongo
+    restart: unless-stopped
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+    healthcheck:
+      test: ['CMD', 'mongosh', '--eval', "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    networks:
+      - url-shortener
+
+networks:
+  url-shortener:
+    driver: bridge
+
+volumes:
+  mongo-data:
