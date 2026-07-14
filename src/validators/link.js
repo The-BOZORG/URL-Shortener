@@ -1,4 +1,4 @@
-import { body, param, query } from 'express-validator';
+import { body, param } from 'express-validator';
 import { Link } from '../models/link.js';
 
 export const generateLinkValidator = [
@@ -15,4 +15,8 @@ export const generateLinkValidator = [
 
       if (backHalfExist) throw new Error('this backHalf is already in user');
     }),
+];
+
+export const deleteLinkValidator = [
+  param('id').isMongoId().withMessage('invalid link id'),
 ];
