@@ -11,7 +11,16 @@ import router from './routes/index.js';
 
 import errorHandler from './middlewares/errorHandler.js';
 
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSpec } from './config/swagger.js';
+
 const app = express();
+
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec, { explorer: true }),
+);
 
 app.use(helmet());
 

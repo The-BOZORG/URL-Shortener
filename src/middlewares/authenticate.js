@@ -64,21 +64,3 @@ export const authorizePermissions = (...roles) => {
     next();
   };
 };
-
-export const checkPermissions = async (userId, resourceUserId) => {
-  const user = await User.findById(userId).select('role').exec();
-
-  if (!user) {
-    throw new UnAuthenticatedError('user not found');
-  }
-
-  if (user.role === 'admin') {
-    return;
-  }
-
-  if (user._id.toString() === resourceUserId.toString()) {
-    return;
-  }
-
-  throw new ForbiddenError('Not authorized to access this route');
-};

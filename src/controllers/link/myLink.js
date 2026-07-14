@@ -1,6 +1,7 @@
 import { Link } from '../../models/link.js';
 import { asyncHandler } from '../../middlewares/asyncHandler.js';
 
+
 export const myLink = asyncHandler(async (req, res) => {
   const { userId } = req.user;
 

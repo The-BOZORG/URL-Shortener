@@ -4,6 +4,7 @@ import { asyncHandler } from '../../middlewares/asyncHandler.js';
 
 import { UnAuthenticatedError } from '../../errors/unAuthenticated.js';
 
+
 export const verifyEmail = asyncHandler(async (req, res) => {
   const { email, verificationToken } = req.query;
 

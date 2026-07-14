@@ -2,6 +2,7 @@ import { NotFoundError } from '../../errors/notFound.js';
 import { asyncHandler } from '../../middlewares/asyncHandler.js';
 import { User } from '../../models/user.js';
 
+
 export const deleteUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
 

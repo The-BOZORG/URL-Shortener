@@ -3,6 +3,7 @@ import { asyncHandler } from '../../middlewares/asyncHandler.js';
 import { User } from '../../models/user.js';
 import { logger } from '../../utils/logger.js';
 
+
 export const logout = asyncHandler(async (req, res) => {
   const { userId } = req.user;
 

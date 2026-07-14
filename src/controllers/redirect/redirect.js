@@ -4,14 +4,15 @@ import { User } from '../../models/user.js';
 import { asyncHandler } from '../../middlewares/asyncHandler.js';
 import { NotFoundError } from '../../errors/notFound.js';
 
+
 export const redirect = asyncHandler(async (req, res) => {
   const { backHalf } = req.params;
 
-  const link = await Link.findById(backHalf)
+  const link = await Link.findOne({ backHalf })
     .select('destination creator totalVisitCount')
     .exec();
 
-  if (!link) throw new NotFoundError('Link not found');
+  if (!link) throw new NotFoundError('link not found');
 
   link.totalVisitCount++;
   await link.save();

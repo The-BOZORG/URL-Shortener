@@ -9,6 +9,7 @@ import { sendVerificationEmail } from '../../utils/sendVerificationEmail.js';
 
 import { ForbiddenError } from '../../errors/forbidden.js';
 
+
 export const register = asyncHandler(async (req, res) => {
   const { username, email, password, role } = req.body;
 

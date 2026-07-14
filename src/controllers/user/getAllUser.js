@@ -2,6 +2,7 @@ import { config } from '../../config/index.js';
 import { asyncHandler } from '../../middlewares/asyncHandler.js';
 import { User } from '../../models/user.js';
 
+
 export const getAllUser = asyncHandler(async (req, res) => {
   const limit = parseInt(req.query.limit) || config.defaultResLimit;
   const offset = parseInt(req.query.offset) || config.defaultResOffset;
