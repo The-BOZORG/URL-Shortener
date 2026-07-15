@@ -70,15 +70,6 @@ SMPT_AUTH_USERNAME=user@ethereal.email
 SMPT_AUTH_PASS=password
 ```
 
-## Authentication Flow
-
-1. **Register** → `POST /api/auth/register` (a verification email is sent).
-2. **Verify email** → open the link in the email → `GET /api/auth/verify-email?token=...&email=...`.
-3. **Login** → `POST /api/auth/login` returns an **access token** (Bearer) and sets an **http-only refresh token cookie**.
-4. **Use protected routes** → send the access token in the `Authorization: Bearer <token>` header.
-5. **Refresh** → `POST /api/auth/refresh` issues a new access token using the refresh cookie.
-6. **Logout** → `POST /api/auth/logout` clears the stored refresh token.
-
 ## API Endpoints
 
 > Interactive documentation (with request/response schemas and "Try it out") is served at **`/api-docs`**.

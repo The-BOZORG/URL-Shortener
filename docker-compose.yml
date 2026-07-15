@@ -10,7 +10,6 @@ services:
     env_file:
       - .env
     environment:
-      # Override the database host to the mongo service on the docker network
       MONGO_URI: 'mongodb://mongo:27017/URLshortner'
       NODE_ENV: 'production'
       PORT: '3000'
